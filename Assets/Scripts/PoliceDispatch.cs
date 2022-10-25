@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public enum PoliceStates
 {
@@ -16,6 +17,7 @@ public class PoliceDispatch : MonoBehaviour
     [SerializeField] PlayerMovement player;
 
     public static PoliceDispatch Dispatch = null;
+    public static event Action<PoliceStates> alertAll;
     
     void Awake()
     {
@@ -45,7 +47,7 @@ public class PoliceDispatch : MonoBehaviour
     public Transform GetNextMarker(Transform marker)
     {
         var newlist = GetAdjacentMarkers(marker);
-        return newlist[Random.Range(0, newlist.Count)];
+        return newlist[UnityEngine.Random.Range(0, newlist.Count)];
     }
 
     public List<Transform> GetPathToPlayer(Transform marker)
@@ -71,7 +73,18 @@ public class PoliceDispatch : MonoBehaviour
                 path.Add(closestMarker);
             }
         }
+        path.Add(player.transform);
 
         return path;
+    }
+
+    public void FoundPlayer()
+    {
+        alertAll(PoliceStates.Chase);
+    }
+
+    public void StartPatrol()
+    {
+        alertAll(PoliceStates.Patrol);
     }
 }

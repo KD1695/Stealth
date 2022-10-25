@@ -200,6 +200,7 @@ MonoBehaviour:
   - {fileID: 1901306211}
   - {fileID: 1013474023}
   - {fileID: 398876631}
+  player: {fileID: 8930459431900416031}
 --- !u!4 &259699507
 Transform:
   m_ObjectHideFlags: 0
@@ -1325,7 +1326,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.0000000010973832, y: 0.99949926, z: -0.031642597, w: 0.0000000346632}
+  m_LocalRotation: {x: -0.0000000010910342, y: 0.99949926, z: -0.031642597, w: -0.00000003446264}
   m_LocalPosition: {x: -1.76, y: 5.19, z: 62.170002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3123,7 +3124,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1681910327}
-  m_LocalRotation: {x: 5.486917e-10, y: 0.99949926, z: -0.0316426, w: 0.000000017331601}
+  m_LocalRotation: {x: -5.4869154e-10, y: 0.99949926, z: -0.031642597, w: -0.000000017331597}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3456,7 +3457,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1954661353}
-  m_LocalRotation: {x: -3.65198e-17, y: 0.9893496, z: -0.1455588, w: 1.8918904e-17}
+  m_LocalRotation: {x: 0.0000000021689956, y: 0.9893496, z: -0.14555882, w: 0.00000001474246}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3865,3 +3866,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32c317c4103e094478f0a65cc1f5411f, type: 3}
+--- !u!114 &8930459431900416031 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3709290790562800218, guid: 32c317c4103e094478f0a65cc1f5411f, type: 3}
+  m_PrefabInstance: {fileID: 8930459431900416030}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14fa4d041f7e12d4789af0132fe94a81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
