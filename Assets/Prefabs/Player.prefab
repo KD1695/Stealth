@@ -147,7 +147,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   body: {fileID: 120584973898483018}
-  movementSpeed: 5
+  movementSpeed: 8
   rotationSpeed: 100
 --- !u!33 &5901811305520894221
 MeshFilter:

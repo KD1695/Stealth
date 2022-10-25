@@ -15,6 +15,7 @@ public class PoliceDispatch : MonoBehaviour
 {
     [SerializeField] List<Transform> markers = new List<Transform>();
     [SerializeField] PlayerMovement player;
+    [SerializeField] GameObject topViewCam;
 
     public static PoliceDispatch Dispatch = null;
     public static event Action<PoliceStates> alertAll;
@@ -86,5 +87,13 @@ public class PoliceDispatch : MonoBehaviour
     public void StartPatrol()
     {
         alertAll(PoliceStates.Patrol);
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            topViewCam.SetActive(!topViewCam.activeSelf);
+        }
     }
 }
