@@ -5,17 +5,17 @@ using UnityEngine;
 public class PoliceMovement : MonoBehaviour
 {
     [SerializeField] float movementSpeed = 5f;
-    Transform targetMarker = null;
+    Vector3 targetMarker = Vector3.zero;
 
     PoliceStates currentState = PoliceStates.Patrol;
-    List<Transform> pathToPlayer = null;
+    List<Vector3> pathToPlayer = new List<Vector3>();
 
     void Start()
     {
-        if(targetMarker == null)
+        if(targetMarker == Vector3.zero)
         {
-            targetMarker = PoliceDispatch.Dispatch.GetNextMarker(this.transform);
-            transform.rotation = Quaternion.LookRotation(targetMarker.position - transform.position);
+            targetMarker = PoliceDispatch.Dispatch.GetNextMarker(this.transform).position;
+            transform.rotation = Quaternion.LookRotation(targetMarker - transform.position);
         }
 
         PoliceDispatch.alertAll += SwitchState;
@@ -28,27 +28,31 @@ public class PoliceMovement : MonoBehaviour
         {
             case PoliceStates.Patrol:
                 {
-                    transform.position = Vector3.MoveTowards(transform.position, targetMarker.position, step);
+                    transform.position = Vector3.MoveTowards(transform.position, targetMarker, step);
 
-                    if (Vector3.Distance(transform.position, targetMarker.position) < 0.001f)
+                    if (Vector3.Distance(transform.position, targetMarker) < 0.001f)
                     {
-                        targetMarker = PoliceDispatch.Dispatch.GetNextMarker(this.transform);
-                        transform.rotation = Quaternion.LookRotation(targetMarker.position - transform.position);
+                        targetMarker = PoliceDispatch.Dispatch.GetNextMarker(this.transform).position;
+                        transform.rotation = Quaternion.LookRotation(targetMarker - transform.position);
                     }
                     break;
                 }
 
             case PoliceStates.Chase:
                 {
-                    transform.position = Vector3.MoveTowards(transform.position, targetMarker.position, step);
+                    transform.position = Vector3.MoveTowards(transform.position, targetMarker, step);
 
-                    if (Vector3.Distance(transform.position, targetMarker.position) < 0.001f)
+                    if (Vector3.Distance(transform.position, targetMarker) < 0.001f)
                     {
                         if(pathToPlayer.Count > 0)
                         {
                             targetMarker = pathToPlayer[0];
                             pathToPlayer.RemoveAt(0);
-                            transform.rotation = Quaternion.LookRotation(targetMarker.position - transform.position);
+                            transform.rotation = Quaternion.LookRotation(targetMarker - transform.position);
+                        }
+                        else
+                        {
+                            pathToPlayer = PoliceDispatch.Dispatch.GetPathToPlayer(this.transform);
                         }
                     }
                     break;
@@ -66,7 +70,7 @@ public class PoliceMovement : MonoBehaviour
             case PoliceStates.Patrol:
                 {
                     currentState = PoliceStates.Patrol;
-                    pathToPlayer = null;
+                    pathToPlayer.Clear();
                     break;
                 }
 

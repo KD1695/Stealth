@@ -19,6 +19,8 @@ public class PoliceDispatch : MonoBehaviour
 
     public static PoliceDispatch Dispatch = null;
     public static event Action<PoliceStates> alertAll;
+    PoliceStates currentState = PoliceStates.Patrol;
+    float timeSinceLastSeen = 100f;
     
     void Awake()
     {
@@ -51,12 +53,13 @@ public class PoliceDispatch : MonoBehaviour
         return newlist[UnityEngine.Random.Range(0, newlist.Count)];
     }
 
-    public List<Transform> GetPathToPlayer(Transform marker)
+    public List<Vector3> GetPathToPlayer(Transform marker)
     {
-        List<Transform> path = new List<Transform>();
+        List<Vector3> path = new List<Vector3>();
         Transform closestMarker = marker;
+        Vector3 playerPosition = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z);
 
-        while(Mathf.Abs(Vector3.Distance(closestMarker.position, player.transform.position)) > 10)
+        while (Mathf.Abs(Vector3.Distance(closestMarker.position, playerPosition)) > 15)
         {
             var adjacentMarkers = GetAdjacentMarkers(closestMarker);
             float minDistance = 999f;
@@ -71,22 +74,25 @@ public class PoliceDispatch : MonoBehaviour
             }
             if(closestMarker != null)
             {
-                path.Add(closestMarker);
+                path.Add(closestMarker.position);
             }
         }
-        path.Add(player.transform);
+        path.Add(playerPosition);
 
         return path;
     }
 
     public void FoundPlayer()
     {
-        alertAll(PoliceStates.Chase);
+        timeSinceLastSeen = 0;
+        currentState = PoliceStates.Chase;
+        alertAll(currentState);
     }
 
     public void StartPatrol()
     {
-        alertAll(PoliceStates.Patrol);
+        currentState = PoliceStates.Patrol;
+        alertAll(currentState);
     }
 
     private void Update()
@@ -95,5 +101,12 @@ public class PoliceDispatch : MonoBehaviour
         {
             topViewCam.SetActive(!topViewCam.activeSelf);
         }
+
+        if(timeSinceLastSeen > 5.0f && currentState != PoliceStates.Patrol)
+        {
+            StartPatrol();
+        }
+
+        timeSinceLastSeen += Time.deltaTime;
     }
 }
