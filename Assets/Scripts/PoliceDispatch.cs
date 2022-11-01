@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System;
+using UnityEngine.SceneManagement;
 
 public enum PoliceStates
 {
@@ -16,12 +17,14 @@ public class PoliceDispatch : MonoBehaviour
     [SerializeField] List<Transform> markers = new List<Transform>();
     [SerializeField] PlayerMovement player;
     [SerializeField] GameObject topViewCam;
+    [SerializeField] GameObject cctvParentObject;
 
     public static PoliceDispatch Dispatch = null;
     public static event Action<PoliceStates> alertAll;
     PoliceStates currentState = PoliceStates.Patrol;
     float timeSinceLastSeen = 100f;
-    
+    float timeSinceCCTVOff = 0f;
+
     void Awake()
     {
         if(Dispatch == null)
@@ -59,7 +62,7 @@ public class PoliceDispatch : MonoBehaviour
         Transform closestMarker = marker;
         Vector3 playerPosition = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z);
 
-        while (Mathf.Abs(Vector3.Distance(closestMarker.position, playerPosition)) > 15)
+        while (Mathf.Abs(Vector3.Distance(closestMarker.position, playerPosition)) > 15 && path.Count < 40)
         {
             var adjacentMarkers = GetAdjacentMarkers(closestMarker);
             float minDistance = 999f;
@@ -89,6 +92,12 @@ public class PoliceDispatch : MonoBehaviour
         alertAll(currentState);
     }
 
+    public void CaughtPlayer()
+    {
+        //gameOverScreen
+        Debug.LogError("GameOver!!!!!!");
+    }
+
     public void StartPatrol()
     {
         currentState = PoliceStates.Patrol;
@@ -101,12 +110,32 @@ public class PoliceDispatch : MonoBehaviour
         {
             topViewCam.SetActive(!topViewCam.activeSelf);
         }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            //restart
+            SceneManager.LoadSceneAsync(0);
+        }
 
-        if(timeSinceLastSeen > 5.0f && currentState != PoliceStates.Patrol)
+        if (timeSinceLastSeen > 5.0f && currentState != PoliceStates.Patrol)
         {
             StartPatrol();
         }
 
+        if(timeSinceCCTVOff > 5 && !cctvParentObject.activeSelf)
+        {
+            EnableCCTVs(true);
+        }
+
         timeSinceLastSeen += Time.deltaTime;
+        timeSinceCCTVOff += Time.deltaTime;
+    }
+
+    public void EnableCCTVs(bool isEnabled)
+    {
+        cctvParentObject.SetActive(isEnabled);
+        if(!isEnabled)
+        {
+            timeSinceCCTVOff = 0;
+        }
     }
 }

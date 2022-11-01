@@ -84,4 +84,9 @@ public class PoliceMovement : MonoBehaviour
                 }
         }
     }
+
+    public void CaughtPlayer()
+    {
+        PoliceDispatch.Dispatch.CaughtPlayer();
+    }
 }
